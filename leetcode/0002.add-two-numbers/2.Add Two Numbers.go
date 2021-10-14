@@ -6,14 +6,27 @@ type ListNode = structures.ListNode
 
 /*遍历每一位数字 相加 大于0 下一位进1 */
 func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
+	carry := 0
 	head := &ListNode{Val: 0}
 	current := head
 	flag := false
 	head1 := l1
 	head2 := l2
-	for head1 != nil {
-		n1 := head1.Val
-		n2 := head2.Val
+	n1, n2 := 0, 0
+	for head1 != nil || head2 != nil || carry != 0 {
+		if head1 == nil {
+			n1 = 0
+		} else {
+			n1 = head1.Val
+
+			head1 = head1.Next
+		}
+		if head2 == nil {
+			n2 = 0
+		} else {
+			n2 = head2.Val
+			head2 = head2.Next
+		}
 		if flag {
 			num := n1 + n2 + 1
 			if num >= 10 {
@@ -33,13 +46,11 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 				current.Next = &ListNode{Val: num}
 			}
 		}
-		head1 = head1.Next
-		head2 = head2.Next
 		current = current.Next
+		carry = (n1 + n2 + carry) / 10
 
 	}
-	head = head.Next
-	return head
+	return head.Next
 }
 
 func addTwoNumbers1(l1 *ListNode, l2 *ListNode) *ListNode {
