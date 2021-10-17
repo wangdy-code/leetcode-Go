@@ -1,5 +1,4 @@
 package leetcode
-package leetcode
 
 import (
 	"fmt"
