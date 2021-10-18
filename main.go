@@ -7,8 +7,11 @@ import (
 type ListNode = structures.ListNode
 
 func main() {
-	nums := []int{-1, 2, -2, 4}
-	println(maxSubArray(nums))
+	set := map[int]struct{}{}
+	println(set[0])
+	set[1] = struct{}{}
+	println(set[1])
+
 }
 func maxSubArray(nums []int) int {
 	max := nums[0]
@@ -21,4 +24,14 @@ func maxSubArray(nums []int) int {
 		}
 	}
 	return max
+}
+func containsDuplicate1(nums []int) bool {
+	set := map[int]struct{}{}
+	for _, v := range nums {
+		if _, has := set[v]; has {
+			return true
+		}
+		set[v] = struct{}{}
+	}
+	return false
 }
