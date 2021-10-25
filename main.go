@@ -8,11 +8,39 @@ import (
 type ListNode = structures.ListNode
 
 func main() {
-	num1 := []int{1, 2}
-	nums2 := []int{3, 4}
-
-	println(findMedianSortedArrays1(num1, nums2))
+	canConstruct("aa", "ab")
 }
+func canConstruct(ransomNote string, magazine string) bool {
+	strMap := make(map[string]int)
+	for _, v := range magazine {
+		if _, has := strMap[string(v)]; has {
+			continue
+		} else {
+			strMap[string(v)] = 1
+		}
+	}
+	for _, v := range ransomNote {
+		if _, has := strMap[string(v)]; !has {
+			return false
+		} else {
+			delete(strMap, string(v))
+		}
+	}
+	return true
+}
+func firstUniqChar(s string) int {
+	charTimes := make(map[string]int)
+	for _, v := range s {
+		charTimes[string(v)]++
+	}
+	for k, v := range s {
+		if charTimes[string(v)] <= 1 {
+			return k
+		}
+	}
+	return -1
+}
+
 func maxSubArray(nums []int) int {
 	max := nums[0]
 	for i := 1; i < len(nums); i++ {
