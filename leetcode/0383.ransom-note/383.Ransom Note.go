@@ -1,5 +1,6 @@
 package leetcode
 
+/* hash表记录字符次数*/
 func canConstruct(ransomNote string, magazine string) bool {
 	strMap := make(map[string]int)
 	for _, v := range magazine {
@@ -18,6 +19,23 @@ func canConstruct(ransomNote string, magazine string) bool {
 
 				delete(strMap, string(v))
 			}
+		}
+	}
+	return true
+}
+
+/*数组记录次数*/
+func canConstruct1(ransomNote string, magazine string) bool {
+	pos := [26]int{}
+
+	for _, v := range magazine {
+		pos[v-'a']++
+	}
+	for _, v := range ransomNote {
+		if pos[v-'a'] == 0 {
+			return false
+		} else {
+			pos[v-'a']--
 		}
 	}
 	return true
