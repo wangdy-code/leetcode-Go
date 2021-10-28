@@ -2,13 +2,17 @@ package main
 
 import (
 	"leetcode-go/leetcode/structures"
+	"reflect"
 	"sort"
 )
 
+type myStruct struct {
+}
 type ListNode = structures.ListNode
 
 func main() {
-	canConstruct("aa", "ab")
+	ms := myStruct{}
+	reflect.DeepEqual(ms, myStruct{})
 }
 func canConstruct(ransomNote string, magazine string) bool {
 	strMap := make(map[string]int)
