@@ -8,7 +8,18 @@ import (
 type ListNode = structures.ListNode
 
 func main() {
-	canConstruct("aa", "ab")
+	l:=[]int{1,2,3,4,5}
+	x:=structures.Ints2List(l)
+	reverseList1(x)
+}
+func reverseList1(head *ListNode) *ListNode {
+	if head == nil || head.Next == nil {
+		return head
+	}
+	newHead := reverseList1(head.Next)
+	head.Next.Next = head
+	head.Next = nil
+	return newHead
 }
 func canConstruct(ransomNote string, magazine string) bool {
 	strMap := make(map[string]int)
