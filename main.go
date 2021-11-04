@@ -10,7 +10,10 @@ type myStruct struct {
 type ListNode = structures.ListNode
 
 func main() {
-	isValid("(){}")
+	boxTypes := [][]int{
+		{5, 10}, {2, 5}, {4, 7}, {3, 9},
+	}
+	maximumUnits(boxTypes, 10)
 }
 func isValid(s string) bool {
 	if len(s)%2 != 0 {
@@ -105,6 +108,30 @@ func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
 	} else {
 		return float64((res[(m+n)/2] + res[(m+n)/2-1])) / float64(2)
 	}
+}
+func maximumUnits(boxTypes [][]int, truckSize int) int {
+	//按照boxTypes[i][1]排序
+	for i := 0; i < len(boxTypes)-1; i++ {
+		for j := 0; j < len(boxTypes)-1-i; j++ {
+			if boxTypes[j][1] < boxTypes[j+1][1] {
+				temp := boxTypes[j]
+				boxTypes[j] = boxTypes[j+1]
+				boxTypes[j+1] = temp
+			}
+		}
+	}
+	res := 0
+	size := 0
+	for _, row := range boxTypes {
+		if size+row[0] <= truckSize {
+			res += row[0] * row[1]
+			size += row[0]
+		} else {
+			res += (truckSize - size) * row[1]
+			size = truckSize
+		}
+	}
+	return res
 }
 func findMedianSortedArrays1(nums1 []int, nums2 []int) float64 {
 
