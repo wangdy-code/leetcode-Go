@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"leetcode-go/leetcode/structures"
 	"sort"
 )
@@ -10,10 +11,33 @@ type myStruct struct {
 type ListNode = structures.ListNode
 
 func main() {
-	boxTypes := [][]int{
-		{5, 10}, {2, 5}, {4, 7}, {3, 9},
+	getHint("1123", "0111")
+}
+func getHint(secret string, guess string) string {
+	cMap := make(map[byte]int)
+	A, B := 0, 0
+	for k := 0; k < len(secret); k++ {
+		if secret[k] == guess[k] {
+			A++
+			guess = guess[:k] + guess[k+1:]
+			secret = secret[:k] + secret[k+1:]
+			k--
+			continue
+		}
+		if _, has := cMap[secret[k]]; has {
+			cMap[secret[k]]++
+		} else {
+			cMap[secret[k]] = 1
+		}
 	}
-	maximumUnits(boxTypes, 10)
+
+	for k, _ := range guess {
+		if _, has := cMap[guess[k]]; has && cMap[guess[k]] >= 0 {
+			B++
+			cMap[guess[k]]--
+		}
+	}
+	return fmt.Sprintf("%dA%dB", A, B)
 }
 func isValid(s string) bool {
 	if len(s)%2 != 0 {
