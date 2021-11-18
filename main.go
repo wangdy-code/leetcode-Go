@@ -1,5 +1,91 @@
 package main
 
-func main() {
+import (
+	"bytes"
+	"fmt"
+	"math/rand"
+	"sync"
+	"sync/atomic"
+	"time"
+)
 
+var count int
+var wg sync.WaitGroup
+var rw sync.RWMutex
+var data int
+
+func main() {
+	cadence := sync.NewCond(&sync.Mutex{})
+	go func() {
+		for range time.Tick(1*time.Millisecond){
+			cadence.Broadcast()
+		}
+	}()
+	takeStep:=func ()  {
+		cadence.L.Lock()
+		cadence.Wait()
+		cadence.L.Unlock()
+	}
+	tryDir := func(dirName string, dir *int32, out *bytes.Buffer) bool {
+		fmt.Fprintf(out, " %v", dirName)
+		atomic.AddInt32(dir, 1)
+		takeStep()
+		if atomic.LoadInt32(dir)==1 {
+			fmt.Fprint(out,". Success!")
+			return true
+		}
+		takeStep()
+		atomic.AddInt32(dir,-1)
+		return false
+	}
+	var left,right int32
+	tryLeft:=func (out *bytes.Buffer) bool  {	
+		return tryDir("left",&left,out)
+	}
+	tryRight:=func (out *bytes.Buffer) bool {
+		return tryDir("right",&right,out)
+	}
+	walk:=func (walking *sync.WaitGroup ,name string)  {
+		var out bytes.Buffer
+		defer func ()  {
+			fmt.Println(out.String())	
+		}()
+		defer walking.Done()
+		fmt.Fprintf(&out,"%v is trying to scoot:",name)
+		for i := 0; i < 5; i++ {
+			if tryLeft(&out)||tryRight(&out) {
+				return
+			}
+		}
+		fmt.Fprintf(&out,"\n&v tosses her hands up in exasperation!",name)
+	}
+	var peopleInHallway sync.WaitGroup
+	peopleInHallway.Add(2)
+	go walk(&peopleInHallway,"Alice")
+	go walk(&peopleInHallway,"Barbara")
+	peopleInHallway.Wait()
+
+}
+
+func read(n int) {
+	rw.RLock()
+	fmt.Printf("读goroutine %d 正在读取...\n", n)
+
+	v := count
+
+	fmt.Printf("读goroutine %d 读取结束，值为：%d\n", n, v)
+	wg.Done()
+	rw.RUnlock()
+}
+
+func write(n int) {
+	rw.Lock()
+	fmt.Printf("写goroutine %d 正在写入...\n", n)
+	v := rand.Intn(1000)
+
+	count = v
+
+	fmt.Printf("写goroutine %d 写入结束，新值为：%d\n", n, v)
+	wg.Done()
+	rw.Unlock()
 }

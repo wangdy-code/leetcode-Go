@@ -18,7 +18,7 @@ func isRectangleCover(rectangles [][]int) bool {
 		cnt[point{a, b}]++
 
 	}
-	if area != (maxX-minX)*(maxY-minY) || cnt[point{minX, minY}] != 1 || cnt[point{maxX, maxY}] != 1 {
+	if area != (maxX-minX)*(maxY-minY) || cnt[point{minX, minY}] != 1 || cnt[point{minX, maxY}] != 1 || cnt[point{maxX, minY}] != 1 || cnt[point{maxX, maxY}] != 1 {
 		return false
 	}
 	delete(cnt, point{minX, minY})
