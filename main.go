@@ -63,7 +63,7 @@ func main() {
 	// go walk(&peopleInHallway, "Alice")
 	// go walk(&peopleInHallway, "Barbara")
 	// peopleInHallway.Wait()
-	println(103 / 10)
+	println(123 / 10)
 }
 
 func read(n int) {
