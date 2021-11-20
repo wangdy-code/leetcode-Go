@@ -13,6 +13,39 @@ var wg sync.WaitGroup
 var rw sync.RWMutex
 var data int
 
+type myValue struct {
+	val int
+	mu  sync.RWMutex
+}
+
+var memo map[int]int
+
+func _integerReplacement(n int) (res int) {
+    if n == 1 {
+        return 0
+    }
+    if res, ok := memo[n]; ok {
+        return res
+    }
+    defer func() { memo[n] = res }()
+    if n%2 == 0 {
+        return 1 + _integerReplacement(n/2)
+    }
+    return 2 + min(_integerReplacement(n/2), _integerReplacement(n/2+1))
+}
+
+func integerReplacement(n int) (res int) {
+    memo = map[int]int{}
+    return _integerReplacement(n)
+}
+
+func min(a, b int) int {
+    if a > b {
+        return b
+    }
+    return a
+}
+
 func main() {
 	// cadence := sync.NewCond(&sync.Mutex{})
 	// go func() {
@@ -63,7 +96,7 @@ func main() {
 	// go walk(&peopleInHallway, "Alice")
 	// go walk(&peopleInHallway, "Barbara")
 	// peopleInHallway.Wait()
-	println(123 / 10)
+	integerReplacement(2020)
 }
 
 func read(n int) {
