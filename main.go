@@ -96,7 +96,13 @@ func main() {
 	// go walk(&peopleInHallway, "Alice")
 	// go walk(&peopleInHallway, "Barbara")
 	// peopleInHallway.Wait()
-	integerReplacement(2020)
+	println(climbStairs(2))
+}
+func climbStairs(n int) int {
+    sqrt5 := math.Sqrt(5)
+    pow1 := math.Pow((1+sqrt5)/2, float64(n))
+    pow2 := math.Pow((1-sqrt5)/2, float64(n))
+    return int(math.Round((pow1 - pow2) / sqrt5))
 }
 
 func read(n int) {
