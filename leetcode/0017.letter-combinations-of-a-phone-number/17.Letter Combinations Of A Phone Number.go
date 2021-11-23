@@ -1,34 +1,41 @@
 package leetcode
 
 /*DFS回溯算法*/
-var phoneMap map[byte][]byte = map[byte][]byte{
-	'2': []byte{'a', 'b', 'c'},
-	'3': []byte{'d', 'e', 'f'},
-	'4': []byte{'g', 'h', 'i'},
-	'5': []byte{'j', 'k', 'l'},
-	'6': []byte{'m', 'n', 'o'},
-	'7': []byte{'p', 'q', 'r', 's'},
-	'8': []byte{'t', 'u', 'v'},
-	'9': []byte{'w', 'x', 'y', 'z'},
-}
+var (
+	letterMap = []string{
+		" ",    //0
+		"",     //1
+		"abc",  //2
+		"def",  //3
+		"ghi",  //4
+		"jkl",  //5
+		"mno",  //6
+		"pqrs", //7
+		"tuv",  //8
+		"wxyz", //9
+	}
+	res   = []string{}
+	final = 0
+)
 
 func letterCombinations(digits string) (ans []string) {
-	n := len(digits)
-	if n == 0 {
-		return
+	if digits == "" {
+		return []string{}
 	}
-	sb := ""
-	dfs(digits, 0, n, sb, ans)
+	res = []string{}
+	findCombination(&digits, 0, "")
+	return res
 }
-func dfs(ds string, i, n int, sb string, ans []string) {
-	if i == n {
-		ans = append(ans, sb)
+
+func findCombination(digits *string, index int, s string) {
+	if index == len(*digits) {
+		res = append(res, s)
 		return
 	}
-	all:=phoneMap[ds]
-	for _, c := range ds[i : i+1] {
-		sb = sb + string(c)
-		dfs(ds, i+1, n, sb, ans)
-		sb = sb[:len(sb)-2]
+	num := (*digits)[index]
+	letter := letterMap[num-'0']
+	for i := 0; i < len(letter); i++ {
+		findCombination(digits, index+1, s+string(letter[i]))
 	}
+	return
 }
