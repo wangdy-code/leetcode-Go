@@ -96,9 +96,33 @@ func main() {
 	// go walk(&peopleInHallway, "Alice")
 	// go walk(&peopleInHallway, "Barbara")
 	// peopleInHallway.Wait()
-	println(1 % 3)
-}
+	str:="chopper is not a tanuki"
+	truncateSentence(str,5)
 
+}
+func truncateSentence(s string, k int) (ans string) {
+	str := ""
+	stringList := []string{}
+	for i := 0; i < len(s); i++ {
+		if s[i] != ' ' {
+			str += string(s[i])
+		} else if s[i] == ' '||i==len(s)-1 {
+			stringList = append(stringList, str)
+			str = ""
+		}
+	}
+	for i, strl := range stringList {
+        if i==k{
+            break
+        }
+		ans += strl
+		if i!= k-1 {
+			ans += " "
+		}
+
+	}
+	return
+}
 type Solution struct {
 	m, n, total int
 	mp          map[int]int
